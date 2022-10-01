@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alpine.js Components</title>
+
+    <!-- Tailwindcss -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js Core -->
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <!-- Style necessary for the correct functioning of the x-cloak -->
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+    <script src="index.js"></script>
+  </head>
+  <body class="bg-orange-50 p-16">
+    <!-- Dropdown -->
+    <h1 class="font-bold mb-4 text-4xl">Dropdown</h1>
+    <div x-data="{open: false}">
+      <button
+        @click="open = !open"
+        class="inline-flex items-center py-2 px-6 bg-orange-600 hover:bg-opacity-95 text-white rounded-md shadow"
+      >
+        Toggle
+        <span
+          class="ph-caret-right ml-2 transition-all"
+          :class="{'rotate-90': open}"
+        ></span>
+      </button>
+      <ul
+        x-show="open"
+        x-cloak
+        @click.outside="open = false"
+        x-transition
+        class="absolute bg-white w-[160px] shadow-md py-1"
+      >
+        <li>
+          <a class="py-1 px-2 hover:bg-gray-200 flex items-center" href="#">
+            <span class="ph-eye mr-2"></span>
+            Open
+          </a>
+        </li>
+        <li>
+          <a class="py-1 px-2 hover:bg-gray-200 flex items-center" href="#">
+            <span class="ph-note-pencil mr-2"></span>
+            Edit
+          </a>
+        </li>
+        <li>
+          <a class="py-1 px-2 hover:bg-gray-200 flex items-center" href="#">
+            <span class="ph-trash mr-2"></span>
+            Delete
+          </a>
+        </li>
+      </ul>
+    </div>
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+    <!-- Modal -->
+    <!-- TODO: after I click on the modal content, the esc key event no longer works -->
+    <h1 class="font-bold mb-4 text-4xl">Modal</h1>
+    <div
+      @keydown.escape="open = false"
+      x-data="{
+  open: false,
+  accept() {
+      console.log('accepted')
+  }
+}"
+    >
+      <button
+        @click="open = true"
+        class="inline-flex items-center py-2 px-6 bg-orange-600 hover:bg-opacity-95 text-white rounded-md shadow"
+      >
+        Toggle Modal
+      </button>
+      <template x-teleport="body">
+        <!-- Backdrop -->
+        <div
+          x-show="open"
+          class="fixed flex justify-center items-center left-0 top-0 bottom-0 right-0 z-10 bg-black/50"
+        >
+          <!-- Dialog -->
+          <div
+            x-show="open"
+            x-transition
+            @click.outside="open = false"
+            class="w-[90%] md:w-1/2 bg-white rounded-lg"
+          >
+            <!-- Modal Title -->
+            <div
+              class="py-2 px-4 text-lg font-semibold bg-gray-100 rounded-t-lg flex items-center justify-between"
+            >
+              <h2>Modal Title</h2>
+              <button @click="open = false">
+                <span class="ph-x ph-lg"></span>
+              </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-4">Modal Content</div>
+            <!-- Modal Footer -->
+            <div
+              class="py-2 px-4 text-lg flex justify-end font-semibold bg-gray-100 rounded-b-lg"
+            >
+              <button
+                @click="accept"
+                class="inline-flex items-center py-1 px-3 bg-emerald-500 hover:bg-opacity-95 text-white rounded-md shadow mr-2"
+              >
+                Accept
+              </button>
+              <button
+                @click="open = false"
+                class="inline-flex items-center py-1 px-3 bg-gray-300 hover:bg-opacity-95 text-gray-800 rounded-md shadow"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+    <!-- Tabs -->
+    <h1 class="font-bold mb-4 text-4xl">Tabs</h1>
+    <div class="flex items-center justify-center max-w-2xl px-2 mx-auto">
+      <div
+        x-data="{
+        tabs: ['Home', 'Users', 'Settings'],
+        tabsContent: ['<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id ipsum turpis. Nam pulvinar, sapien vitae maximus varius, velit magna dictum urna, eu malesuada dolor ante nec erat. Mauris vitae quam eu turpis iaculis cursus in ac ex. Curabitur fringilla elementum nibh sed aliquet. Quisque vel arcu fermentum, dapibus arcu et, fringilla arcu. In at aliquam urna. Donec laoreet elit non nibh ullamcorper hendrerit. Vestibulum nunc ante, accumsan sed tortor sit amet, pretium venenatis mi. Fusce mollis pretium scelerisque. Donec fringilla rhoncus dolor vitae ultricies. Sed sed rutrum risus.</p>', '<p>Aenean et finibus mauris. Integer sagittis massa turpis. Quisque sit amet dictum augue, euismod consectetur felis. Donec aliquet imperdiet mi, euismod condimentum dolor dignissim ac. Etiam aliquet nisi eget nibh laoreet, vel convallis odio aliquam. Curabitur porttitor eget dolor at consequat. Vestibulum malesuada interdum enim eu iaculis.</p>', '<p>Quisque sapien risus, ultrices feugiat gravida vitae, iaculis nec justo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam mollis nulla odio, eu bibendum lectus rutrum at. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tincidunt orci eget consequat facilisis. Duis venenatis ipsum sit amet ex porta, non laoreet velit blandit. In tempor augue ut turpis lobortis sagittis. Etiam est lacus, rhoncus ac ultrices vitae, vehicula vel leo. Nam sed nisl tincidunt, volutpat odio sed, gravida nunc. Nam blandit purus eu erat molestie fringilla. Aenean id pulvinar dui, dapibus pretium enim. Praesent hendrerit consequat quam et accumsan. Morbi sed pretium tellus. Suspendisse mattis odio eget turpis viverra, at congue ligula mattis.</p>'],
+        activeTab: 'Home'
+      }"
+        class="w-full rounded-md"
+      >
+        <div
+          class="flex justify-end px-4 pt-3 space-x-4 font-bold bg-white rounded-tr-md rounded-tl-md"
+        >
+          <template x-for="tab in tabs">
+            <button
+              @click="activeTab = tab"
+              :class="{ 'bg-gray-100 transition transform ease-in-out duration-300': activeTab === tab }"
+              class="px-4 py-2 font-bold tracking-wider rounded-tr-md rounded-tl-md"
+              x-text="tab"
+            ></button>
+          </template>
+        </div>
+        <div
+          x-cloak
+          class="flex px-4 py-2 tracking-wider font-semi-bold bg-gray-100 h-72"
+        >
+          <template x-for="(tab, idx) in tabs">
+            <div x-show="activeTab === tab" x-html="tabsContent[idx]"></div>
+          </template>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+    <!-- Carousel -->
+    <h1 class="font-bold mb-4 text-4xl">Carousel</h1>
+    <!-- $watch(...) keeps "current" in range even if buttons are pressed again before "@transitionend" is triggered -->
+    <div
+      class="max-w-screen-md mx-auto mt-4"
+      x-data="{
+        images: ['assets/1.jpg', 'assets/2.jpg', 'assets/3.jpg', 'assets/4.jpg'],
+        current: 0,
+        last: null,
+        update(val) {
+            this.last = this.current;
+            this.current = val;
+        }
+      }"
+      x-init="() => {
+        $watch('current', (val) => {
+            if(val < -1) update(images.length + val); else if(val > images.length) update(val - images.length);
+        });
+      }"
+    >
+      <div
+        class="relative overflow-x-hidden shadow-2xl rounded pt-[62.5%]"
+        @keydown.right="update(current+1)"
+        @keydown.left="update(current-1)"
+      >
+        <div
+          class="absolute inset-0 bg-green-100 flex"
+          :style="`transform: translateX(${(current + 1) * -100}%)`"
+          :class="{ 'transition-transform': !(last >= images.length || last < 0) }"
+          @transitionend="if (current === -1) update(images.length - 1); else if (current === images.length) update(0)"
+        >
+          <template
+            x-for="image in [images[images.length -1], ...images, images[0]]"
+          >
+            <img
+              class="flex-shrink-0 w-full h-full object-center object-cover"
+              :src="image"
+              alt=""
+            />
+          </template>
+        </div>
+        <div
+          class="absolute top-0 left-0 bottom-0 flex items-center"
+          x-show="images.length > 1"
+        >
+          <button
+            class="py-2 px-2 text-4xl opacity-25 bg-gray-100 rounded-r-lg hover:opacity-75 focus:outline-none focus:ring"
+            @click="update(current - 1)"
+          >
+            ‹
+          </button>
+        </div>
+        <div
+          class="absolute top-0 right-0 bottom-0 flex items-center"
+          x-show="images.length > 1"
+        >
+          <button
+            class="py-2 px-2 text-4xl opacity-25 bg-gray-100 rounded-l-lg hover:opacity-75 focus:outline-none focus:ring"
+            @click="update(current + 1)"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+      <div class="flex mt-2 justify-center">
+        <template x-for="(image, idx) in images">
+          <a
+            @click="update(idx)"
+            class="cursor-pointer w-[80px] border border-gray-300 hover:border-purple-500 flex items-center justify-center"
+            :class="{'border-purple-600': current === idx}"
+          >
+            <img :src="image" alt="" class="object-cover" />
+          </a>
+        </template>
+      </div>
+    </div>
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+    <!-- Notification -->
+    <h1 class="font-bold mb-4 text-4xl">Notification</h1>
+    <div
+      x-data="{
+  visible: false,
+  timeout: 5000,
+  percent: 0,
+  interval: null,
+  close() {
+      this.visible = false;
+      clearInterval(this.interval)
+  },
+  toast() {
+    if (!this.visible) {
+        this.percent = 0
+        this.visible = true
+        setTimeout(() => {
+            this.visible = false;
+        }, this.timeout)
+        const startDate = Date.now();
+        const futureDate = startDate + this.timeout;
+        this.interval = setInterval(() => {
+            const currentDate = Date.now();
+            this.percent = (currentDate - startDate) * 100 / (futureDate - startDate);
+            if (this.percent >= 100) {
+                clearInterval(this.interval)
+            }
+        }, 30)
+    }
+  }
+}"
+    >
+      <button
+        @click="toast"
+        class="inline-flex items-center py-2 px-6 bg-orange-600 hover:bg-opacity-95 text-white rounded-md shadow mb-4"
+      >
+        Show Notification
+      </button>
+      <div
+        x-show="visible"
+        x-cloak
+        x-transition
+        class="relative py-2 px-4 pb-4 bg-emerald-500 text-white"
+      >
+        <div class="font-semibold mb-2">Lorem ipsum dolor sit</div>
+        <div class="text-sm">
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro ea
+          placeat sed soluta velit sint, adipisci consequuntur quaerat alias
+          consectetur iste perspiciatis ducimus consequatur vitae? Officia,
+          assumenda. Nobis, expedita optio.
+        </div>
+        <button
+          @click="close"
+          class="absolute flex items-center justify-center right-2 top-2 w-[30px] h-[30px] rounded-full hover:bg-black/10 transition-colors"
+        >
+          <span class="ph-x ph-xl"></span>
+        </button>
+        <!-- Progress -->
+        <div>
+          <div
+            class="absolute left-0 bottom-0 right-0 h-[6px] bg-black/10"
+            :style="{'width': `${percent}%`}"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+    <!-- Popover -->
+    <!-- TODO: after I click on the popover content, the esc key event no longer works -->
+    <h1 class="font-bold mb-4 text-4xl">Popover</h1>
+    <div
+      @keydown.escape="show = false"
+      x-data="{
+  show: false, 
+  title: 'Test Popover',
+  message: 'Test <b>popover</b> message',
+  togglePopover() {
+      console.log(this.$refs.button, this.$refs.popover)
+      this.show = !this.show
+  }
+}"
+      class="relative flex justify-center"
+    >
+      <button
+        x-ref="button"
+        @click="togglePopover"
+        class="inline-flex items-center py-2 px-6 bg-orange-600 hover:bg-opacity-95 text-white rounded-md shadow"
+      >
+        Popover
+      </button>
+      <div
+        x-ref="popover"
+        x-show="show"
+        x-cloak
+        @click.outside="show = false"
+        x-transition
+        class="absolute mb-2 bottom-[100%] shadow-lg bg-white w-[200px] rounded"
+      >
+        <!-- Header -->
+        <div class="flex justify-between items-center font-semibold py-1 px-2">
+          <span x-text="title"></span>
+          <button @click="show = false"><span class="ph-x"></span></button>
+        </div>
+        <!-- Body -->
+        <div x-html="message" class="p-3 text-sm"></div>
+      </div>
+    </div>
+
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+
+    <!-- Accordion and Collapse-->
+    <h1 class="font-bold mb-4 text-4xl">Accordion and Collapse</h1>
+    <div class="flex justify-center">
+      <div class="mr-8">
+        <h1 class="font-medium max-w-xl mx-auto pt-10 pb-4">Accordion</h1>
+        <div
+          class="bg-white max-w-xl mx-auto border border-gray-200"
+          x-data="{
+            activeItem: null,
+            selectItem(item) {
+              this.activeItem = this.activeItem === item ? null : item
+            }
+          }"
+        >
+          <ul class="shadow-box">
+            <template x-for="item in $store.items.list">
+              <li class="relative border-b border-gray-200">
+                <button
+                  type="button"
+                  class="w-full px-8 py-6 text-left"
+                  @click="selectItem(item)"
+                >
+                  <div class="flex items-center justify-between">
+                    <span
+                      x-text="item.title"
+                      :class="{'font-bold': activeItem === item}"
+                    ></span>
+                    <span
+                      class="ph-caret-right"
+                      :class="{'rotate-90': activeItem === item}"
+                    ></span>
+                  </div>
+                </button>
+                <div
+                  class="relative overflow-hidden transition-all max-h-0 duration-700"
+                  :style="activeItem === item && `max-height: ${$el.scrollHeight}px`"
+                >
+                  <div class="p-6" x-html="item.body"></div>
+                </div>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+      <div class="ml-8">
+        <h1 class="font-medium max-w-xl mx-auto pt-10 pb-4">Collapse</h1>
+        <div class="bg-white max-w-xl mx-auto border border-gray-200" x-data>
+          <ul>
+            <template x-for="(item, idx) in $store.items.list">
+              <li class="relative border-b border-gray-200">
+                <button
+                  type="button"
+                  class="w-full px-8 py-6 text-left"
+                  @click="$store.items.handleClick(idx)"
+                >
+                  <div class="flex items-center justify-between">
+                    <span
+                      x-text="item.title"
+                      :class="{'font-bold': item.expanded}"
+                    ></span>
+                    <span
+                      class="ph-caret-right"
+                      :class="{'rotate-90': item.expanded}"
+                    ></span>
+                  </div>
+                </button>
+
+                <div
+                  class="relative overflow-hidden transition-all max-h-0 duration-700"
+                  :style="item.expanded && `max-height: ${$el.scrollHeight}px`"
+                >
+                  <div class="p-6" x-html="item.body"></div>
+                </div>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="block h-[1px] border-[0.5px] border-gray-600 border-solid my-4"
+    />
+    <!-- Tooltip -->
+    <h1 class="font-bold mb-4 text-4xl">Tooltip</h1>
+    <div class="flex items-center justify-center" x-data="{ tooltip: false }">
+      <div class="relative z-30 inline-flex">
+        <div
+          @mouseover="tooltip = true"
+          @mouseleave="tooltip = false"
+          class="w-8 h-8 bg-white rounded-md shadow cursor-pointer"
+        >
+          <span class="ph-bell ph-2x"></span>
+        </div>
+
+        <div x-show="tooltip" x-transition x-cloak class="relative">
+          <div
+            class="absolute bottom-0 left-24 z-10 px-2 py-1 -mb-1.5 text-sm text-white transform -translate-x-full translate-y-full bg-gray-700 rounded-lg shadow-lg min-w-max"
+          >
+            You have no unread notifications
+          </div>
+          <svg
+            class="absolute z-10 -right-1 w-6 h-5 text-gray-700 transform translate-y-8 fill-current stroke-current -translate-x-1/2"
+          >
+            <rect x="12" y="-10" width="8" height="8" transform="rotate(45)" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
