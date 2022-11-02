@@ -470,5 +470,64 @@
         </div>
       </div>
     </div>
+    <!-- Pagination -->
+    <h1 class="font-bold mb-4 text-4xl">Pagination</h1>
+    <div class="flex justify-center mt-4">
+      <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+        <div x-data="{from: 1, until: 5, per_page: 5, totalElements: 100, currentPage: 1, totalPages: 20, pages: Array.from({length: 20}, (_, i) => i + 1)}" class="flex flex-1 items-center justify-between" x-init="$watch('currentPage', value => {from = (value - 1) * per_page + 1; until = value * per_page;})">
+          <div class="mr-4">
+            <p class="text-sm text-gray-700">
+              Showing
+              <span class="font-medium" x-text="from"></span>
+              to
+              <span class="font-medium" x-text="until"></span>
+              of
+              <span class="font-medium" x-text="totalElements"></span>
+              results
+            </p>
+          </div>
+          <div>
+            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <button class="relative inline-flex items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 focus:z-20 rounded-l-md" :class="{'hover:bg-gray-50': currentPage !== 1}" :disabled="currentPage === 1" @click="currentPage -= 1">&lt;</button>
+              <template x-if="totalPages <= 7">
+                <template x-for="page in pages">
+                  <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20" :class="currentPage === page ? 'z-10 border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'" @click="currentPage = page" x-text="page"></button>
+                </template>
+              </template>
+              <template x-if="totalPages > 7 && currentPage < 1 + 4">
+                <div>
+                  <template x-for="page in pages.slice(0, 5)">
+                    <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20" :class="currentPage === page ? 'z-10 border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'" @click="currentPage = page" x-text="page"></button>
+                  </template>
+                  <span class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-default">...</span>
+                  <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20 border-gray-300 bg-white text-gray-500 hover:bg-gray-50" @click="currentPage = totalPages" x-text="totalPages"></button>
+                </div>
+              </template>
+              <template x-if="totalPages > 7 && currentPage > totalPages - 4">
+                <div>
+                  <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20 border-gray-300 bg-white text-gray-500 hover:bg-gray-50" @click="currentPage = 1">1</button>
+                  <span class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-default">...</span>
+                  <template x-for="page in pages.slice(-5)">
+                    <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20" :class="currentPage === page ? 'z-10 border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'" @click="currentPage = page" x-text="page"></button>
+                  </template>
+                </div>
+              </template>
+              <template x-if="totalPages > 7 && !(currentPage < 1 + 4 || currentPage > totalPages - 4)">
+                <div>
+                  <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20 border-gray-300 bg-white text-gray-500 hover:bg-gray-50" @click="currentPage = 1">1</button>
+                  <span class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-default">...</span>
+                  <template x-for="page in pages.slice(pages.indexOf(currentPage) - 1, pages.indexOf(currentPage) + 2)">
+                    <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20" :class="currentPage === page ? 'z-10 border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'" @click="currentPage = page" x-text="page"></button>
+                  </template>
+                  <span class="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-default">...</span>
+                  <button class="relative inline-flex items-center border px-4 py-2 text-sm font-medium focus:z-20 border-gray-300 bg-white text-gray-500 hover:bg-gray-50" @click="currentPage = totalPages" x-text="totalPages"></button>
+                </div>
+              </template>
+              <button class="relative inline-flex items-center border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 focus:z-20 rounded-r-md" :class="{'hover:bg-gray-50': currentPage !== totalPages}" :disabled="currentPage === totalPages" @click="currentPage += 1">&gt;</button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
